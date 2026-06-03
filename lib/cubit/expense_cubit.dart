@@ -6,7 +6,7 @@ import 'dart:convert';
 
 class ExpenseCubit extends Cubit<ExpenseState> {
   ExpenseCubit() : super(const ExpenseState()) {
-    loadExpensesFromLocal(); // 🔥 load on start
+    loadExpensesFromLocal();
   }
 
   Future<void> loadExpensesFromLocal() async {

@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 abstract class AuthState {}
 
@@ -20,11 +19,16 @@ class AuthError extends AuthState {
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
-  Future<void> _saveUserData(String email) async {
+  Future<void> _saveUserData(
+      String email,
+      String phone,
+      String address,
+      ) async {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.setString('email', email);
-    await prefs.setBool('isLoggedIn', true);
+    await prefs.setString('phone', phone);
+    await prefs.setString('address', address);
 
     if (FirebaseAuth.instance.currentUser != null) {
       await prefs.setString(
@@ -32,9 +36,16 @@ class AuthCubit extends Cubit<AuthState> {
         FirebaseAuth.instance.currentUser!.uid,
       );
     }
+
+    await prefs.setBool('isLoggedIn', true);
   }
 
-  Future<void> signUp(String email, String password) async {
+  Future<void> signUp(
+      String email,
+      String password,
+      String phone,
+      String address,
+      ) async {
     emit(AuthLoading());
 
     try {
@@ -43,7 +54,7 @@ class AuthCubit extends Cubit<AuthState> {
         password: password,
       );
 
-      await _saveUserData(email);
+      await _saveUserData(email, phone, address);
 
       emit(AuthSuccess());
     } on FirebaseAuthException catch (e) {
@@ -53,7 +64,10 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> login(String email, String password) async {
+  Future<void> login(
+      String email,
+      String password,
+      ) async {
     emit(AuthLoading());
 
     try {
@@ -62,7 +76,8 @@ class AuthCubit extends Cubit<AuthState> {
         password: password,
       );
 
-      await _saveUserData(email);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
 
       emit(AuthSuccess());
     } on FirebaseAuthException catch (e) {
@@ -76,14 +91,10 @@ class AuthCubit extends Cubit<AuthState> {
     await FirebaseAuth.instance.signOut();
 
     final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
+
+    await prefs.setBool('isLoggedIn', false);
 
     emit(AuthInitial());
-  }
-
-  Future<bool> isLoggedIn() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('isLoggedIn') ?? false;
   }
 
   Future<String?> getUserEmail() async {
@@ -91,8 +102,23 @@ class AuthCubit extends Cubit<AuthState> {
     return prefs.getString('email');
   }
 
+  Future<String?> getPhone() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('phone');
+  }
+
+  Future<String?> getAddress() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('address');
+  }
+
   Future<String?> getUserUid() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('uid');
+  }
+
+  Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isLoggedIn') ?? false;
   }
 }

@@ -26,7 +26,7 @@ class SpendWiseApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => ExpenseCubit()),
-        BlocProvider(create: (context) => AuthCubit()), // આ લાઇન ખૂટતી હતી
+        BlocProvider(create: (context) => AuthCubit()),
       ],
       child: MaterialApp(
         title: 'SpendWise',

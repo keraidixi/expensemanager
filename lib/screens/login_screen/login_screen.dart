@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(
-                labelText: "Email",
+                hintText: "Email",
                 border: OutlineInputBorder(),
               ),
             ),
@@ -39,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
             TextField(
               controller: _passwordController,
               decoration: const InputDecoration(
-                labelText: "Password",
+                hintText: "Password",
                 border: OutlineInputBorder(),
               ),
               obscureText: true,
@@ -65,19 +65,35 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               child: const Text("Login"),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => BlocProvider.value(
-                      value: BlocProvider.of<AuthCubit>(context),
-                      child: SignUpScreen(),
+            const SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Don't have an account? ",
+                  style: TextStyle(fontSize: 16),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                          value: BlocProvider.of<AuthCubit>(context),
+                          child: SignUpScreen(),
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Sign Up",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
                     ),
                   ),
-                );
-              },
-              child: const Text("Don't have an account? Sign Up"),
+                ),
+              ],
             ),
           ],
         ),

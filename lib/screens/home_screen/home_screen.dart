@@ -7,6 +7,7 @@ import 'widgets/expense_card.dart';
 import 'widgets/home_header.dart';
 import 'widgets/category_filters.dart';
 import 'widgets/empty_state.dart';
+import '../profile/profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -18,6 +19,14 @@ class HomeScreen extends StatelessWidget {
         title: const Text('SpendWise',style: TextStyle(fontSize: 28),),
         centerTitle: true,
         backgroundColor: Color(0xFFC4C1CF),
+        actions: [
+          IconButton(onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+          }, icon: Icon(Icons.person))
+        ],
       ),
       body: SafeArea(
         child: BlocBuilder<ExpenseCubit, ExpenseState>(

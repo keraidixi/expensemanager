@@ -5,6 +5,8 @@ import '../../cubit/auth_cubit.dart';
 class SignUpScreen extends StatelessWidget {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _addressController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class SignUpScreen extends StatelessWidget {
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  hintText: 'Email',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -40,22 +42,43 @@ class SignUpScreen extends StatelessWidget {
               TextField(
                 controller: _passwordController,
                 decoration: InputDecoration(
-                  labelText: "Password",
+                  hintText: "Password",
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
               ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _phoneController,
+                keyboardType: TextInputType.phone,
+                decoration: const InputDecoration(
+                  hintText: 'Phone Number',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              TextField(
+                controller: _addressController,
+                decoration: const InputDecoration(
+                  hintText: 'Address',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
                   context.read<AuthCubit>().signUp(
                     _emailController.text.trim(),
                     _passwordController.text.trim(),
+                    _phoneController.text.trim(),
+                    _addressController.text.trim(),
                   );
                 },
                 child: const Text("Sign Up"),
-              ),
-            ],
+              ),            ],
           ),
         ),
       ),

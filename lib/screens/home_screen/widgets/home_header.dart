@@ -16,14 +16,14 @@ class HomeHeader extends StatelessWidget {
     final currencyFormatter = NumberFormat.currency(
       locale: 'en_IN',
       symbol: '₹',
-      decimalDigits: 0, // Mockup shows ₹2,700
+      decimalDigits: 0,
     );
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFFC4C1CF), // Light grayish purple background from mockup
+        color: const Color(0xFFC4C1CF),
         borderRadius: BorderRadius.circular(24),
       ),
       child: Row(
