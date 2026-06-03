@@ -22,7 +22,7 @@ class SpendWiseApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // MultiBlocProvider નો ઉપયોગ કરો
+    // MultiBlocProvider
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => ExpenseCubit()),

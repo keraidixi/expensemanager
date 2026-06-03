@@ -1,9 +1,39 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/expense_model.dart';
 import 'expense_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class ExpenseCubit extends Cubit<ExpenseState> {
-  ExpenseCubit() : super(const ExpenseState());
+  ExpenseCubit() : super(const ExpenseState()) {
+    loadExpensesFromLocal(); // 🔥 load on start
+  }
+
+  Future<void> loadExpensesFromLocal() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final data = prefs.getString('expenses');
+
+    if (data != null) {
+      final List decoded = jsonDecode(data);
+
+      final expenses = decoded
+          .map((e) => Expense.fromJson(e))
+          .toList();
+
+      emit(state.copyWith(expenses: expenses));
+    }
+  }
+
+  Future<void> _saveExpensesToLocal() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final expenseList = state.expenses
+        .map((e) => e.toJson())
+        .toList();
+
+    await prefs.setString('expenses', jsonEncode(expenseList));
+  }
 
   void addExpense({
     required String title,
@@ -11,7 +41,6 @@ class ExpenseCubit extends Cubit<ExpenseState> {
     required String category,
     required DateTime date,
   }) {
-    // Create new expense
     Expense expense = Expense(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: title,
@@ -20,17 +49,15 @@ class ExpenseCubit extends Cubit<ExpenseState> {
       date: date,
     );
 
-    // Copy old expense list
     List<Expense> expenses = List.from(state.expenses);
 
-    // Add new expense
     expenses.add(expense);
 
-    // Sort by latest date
     expenses.sort((a, b) => b.date.compareTo(a.date));
 
-    // Update state
     emit(state.copyWith(expenses: expenses));
+
+    _saveExpensesToLocal();
   }
 
   void deleteExpense(String id) {
@@ -39,6 +66,8 @@ class ExpenseCubit extends Cubit<ExpenseState> {
         .toList();
 
     emit(state.copyWith(expenses: expenses));
+
+    _saveExpensesToLocal();
   }
 
   void setFilter(String category) {
