@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../models/expense_model.dart';
+import '../../models/expense_model.dart';
 
 class ExpenseState extends Equatable {
   final List<Expense> expenses;

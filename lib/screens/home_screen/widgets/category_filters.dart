@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../cubit/expense_cubit.dart';
+import '../../../data/cubit/expense_cubit.dart';
 
 class CategoryFilters extends StatelessWidget {
   final String selectedFilter;
@@ -9,7 +9,15 @@ class CategoryFilters extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categories = ['All', 'Food', 'Travel', 'Shopping', 'Bills', 'Entertainment', 'Other'];
+    final categories = [
+      'All',
+      'Food',
+      'Travel',
+      'Shopping',
+      'Bills',
+      'Entertainment',
+      'Other',
+    ];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -19,7 +27,7 @@ class CategoryFilters extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(right: 8),
             child: ChoiceChip(
-              label: Text(category,style: TextStyle(fontSize: 18),),
+              label: Text(category, style: TextStyle(fontSize: 18)),
               selected: isSelected,
               onSelected: (selected) {
                 if (selected) {

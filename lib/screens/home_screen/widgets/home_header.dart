@@ -29,7 +29,6 @@ class HomeHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Left Column
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

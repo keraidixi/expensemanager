@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../cubit/auth_cubit.dart';
+import '../../data/cubit/auth_cubit.dart';
 import '../home_screen/home_screen.dart';
 import '../signup_screen/signup_screen.dart';
 
@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (_) => const HomeScreen()),
-                        (route) => false,
+                    (route) => false,
                   );
                 } catch (e) {
                   ScaffoldMessenger.of(
@@ -87,10 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   child: const Text(
                     "Sign Up",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.black),
                   ),
                 ),
               ],
@@ -105,15 +102,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => const HomeScreen(),
-                    ),
-                        (route) => false,
+                    MaterialPageRoute(builder: (_) => const HomeScreen()),
+                    (route) => false,
                   );
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(e.toString())),
-                  );
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(e.toString())));
                 }
               },
             ),

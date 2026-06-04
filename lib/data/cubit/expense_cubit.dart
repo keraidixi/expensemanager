@@ -1,38 +1,22 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../models/expense_model.dart';
 import 'expense_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
+import '../../models/expense_model.dart';
+import '../repository/expense_repository.dart';
 
 class ExpenseCubit extends Cubit<ExpenseState> {
-  ExpenseCubit() : super(const ExpenseState()) {
+  final ExpenseRepository repository;
+
+  ExpenseCubit(this.repository) : super(const ExpenseState()) {
     loadExpensesFromLocal();
   }
 
   Future<void> loadExpensesFromLocal() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    final data = prefs.getString('expenses');
-
-    if (data != null) {
-      final List decoded = jsonDecode(data);
-
-      final expenses = decoded
-          .map((e) => Expense.fromJson(e))
-          .toList();
-
-      emit(state.copyWith(expenses: expenses));
-    }
+    final expenses = await repository.loadExpenses();
+    emit(state.copyWith(expenses: expenses));
   }
 
   Future<void> _saveExpensesToLocal() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    final expenseList = state.expenses
-        .map((e) => e.toJson())
-        .toList();
-
-    await prefs.setString('expenses', jsonEncode(expenseList));
+    await repository.saveExpenses(state.expenses);
   }
 
   void addExpense({
@@ -52,7 +36,6 @@ class ExpenseCubit extends Cubit<ExpenseState> {
     List<Expense> expenses = List.from(state.expenses);
 
     expenses.add(expense);
-
     expenses.sort((a, b) => b.date.compareTo(a.date));
 
     emit(state.copyWith(expenses: expenses));
@@ -61,9 +44,8 @@ class ExpenseCubit extends Cubit<ExpenseState> {
   }
 
   void deleteExpense(String id) {
-    List<Expense> expenses = state.expenses
-        .where((expense) => expense.id != id)
-        .toList();
+    List<Expense> expenses =
+    state.expenses.where((e) => e.id != id).toList();
 
     emit(state.copyWith(expenses: expenses));
 
@@ -72,5 +54,9 @@ class ExpenseCubit extends Cubit<ExpenseState> {
 
   void setFilter(String category) {
     emit(state.copyWith(selectedFilter: category));
+  }
+
+  void clearExpenses() {
+    emit(const ExpenseState());
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../cubit/expense_cubit.dart';
+import '../../../data/cubit/expense_cubit.dart';
 import '../../../../widgets/custom_button.dart';
 
 class DeleteExpenseButton extends StatelessWidget {

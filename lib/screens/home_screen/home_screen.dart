@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../cubit/expense_cubit.dart';
-import '../../cubit/expense_state.dart';
+import '../../data/cubit/expense_cubit.dart';
+import '../../data/cubit/expense_state.dart';
 import '../add_expense_screen/add_expense_screen.dart';
 import 'widgets/expense_card.dart';
 import 'widgets/home_header.dart';

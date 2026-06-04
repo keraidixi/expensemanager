@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../../models/expense_model.dart';
+import '../../../models/expense_model.dart';
 
 class ExpenseDetailsCard extends StatelessWidget {
   final Expense expense;

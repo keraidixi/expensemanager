@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../cubit/auth_cubit.dart';
+import '../../data/cubit/auth_cubit.dart';
 import '../login_screen/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
