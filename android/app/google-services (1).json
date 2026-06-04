@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "297773074836",
+    "project_id": "spendwise-d2258",
+    "storage_bucket": "spendwise-d2258.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:297773074836:android:4171518a0ac94af2d96781",
+        "android_client_info": {
+          "package_name": "com.example.expense_manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "297773074836-vu1hcapps95n16pj06n2qh9qkbmfcep9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.expense_manager",
+            "certificate_hash": "df7791d4ad717251b81a5b969b8c4812fe28f66d"
+          }
+        },
+        {
+          "client_id": "297773074836-243b8dc7t8esblgnvdkc25nch32apjqo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVdGRVtB0r-8hfUmHpoVc6fiWfaDSbMWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "297773074836-243b8dc7t8esblgnvdkc25nch32apjqo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "297773074836-ittdcjbtp65f8k6dlgr3o6fh8us6gl6q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.expenseManager"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

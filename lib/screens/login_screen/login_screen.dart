@@ -95,6 +95,28 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 15),
+
+            ElevatedButton.icon(
+              label: const Text("Sign in with Google"),
+              onPressed: () async {
+                try {
+                  await context.read<AuthCubit>().signInWithGoogle();
+
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const HomeScreen(),
+                    ),
+                        (route) => false,
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(e.toString())),
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),

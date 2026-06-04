@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class AuthState {}
 
@@ -120,5 +121,46 @@ class AuthCubit extends Cubit<AuthState> {
   Future<bool> isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool('isLoggedIn') ?? false;
+  }
+
+  Future<void> signInWithGoogle() async {
+    emit(AuthLoading());
+
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+
+      final GoogleSignInAccount? googleUser =
+      await googleSignIn.signIn();
+
+      if (googleUser == null) {
+        emit(AuthInitial());
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+      await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
+
+      final user = userCredential.user;
+
+      if (user != null) {
+        final prefs = await SharedPreferences.getInstance();
+
+        await prefs.setString('email', user.email ?? '');
+        await prefs.setString('uid', user.uid);
+        await prefs.setBool('isLoggedIn', true);
+
+        emit(AuthSuccess());
+      }
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
   }
 }
