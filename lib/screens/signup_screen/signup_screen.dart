@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/cubit/auth_cubit.dart';
+import '../login_screen/login_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   final _emailController = TextEditingController();
@@ -17,7 +18,11 @@ class SignUpScreen extends StatelessWidget {
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(const SnackBar(content: Text("Signup Successful!")));
-            Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  (route) => false,
+            );
           } else if (state is AuthError) {
             ScaffoldMessenger.of(
               context,
@@ -70,6 +75,21 @@ class SignUpScreen extends StatelessWidget {
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
+
+                  if (_emailController.text.trim().isEmpty ||
+                      _passwordController.text.trim().isEmpty ||
+                      _phoneController.text.trim().isEmpty ||
+                      _addressController.text.trim().isEmpty) {
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("All fields are required"),
+                      ),
+                    );
+
+                    return;
+                  }
+
                   context.read<AuthCubit>().signUp(
                     _emailController.text.trim(),
                     _passwordController.text.trim(),

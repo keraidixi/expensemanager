@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../repository/auth_repository.dart';
+import '../controller/auth_controller.dart';
 import 'expense_cubit.dart';
 
 abstract class AuthState {}
@@ -12,15 +12,16 @@ class AuthSuccess extends AuthState {}
 
 class AuthError extends AuthState {
   final String message;
-
   AuthError(this.message);
 }
+
 class AuthCubit extends Cubit<AuthState> {
-  final AuthRepository repository;
+  final AuthController controller;
   final ExpenseCubit expenseCubit;
 
-  AuthCubit(this.repository, this.expenseCubit) : super(AuthInitial());
+  AuthCubit(this.controller, this.expenseCubit) : super(AuthInitial());
 
+  // SIGNUP
   Future<void> signUp(
       String email,
       String password,
@@ -30,58 +31,63 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
 
     try {
-      await repository.signUp(email, password, phone, address);
+      await controller.signUp(email, password, phone, address);
       emit(AuthSuccess());
     } catch (e) {
       emit(AuthError(e.toString()));
     }
   }
 
+  // LOGIN
   Future<void> login(String email, String password) async {
     emit(AuthLoading());
 
     try {
-      await repository.login(email, password);
+      await controller.login(email, password);
+
       emit(AuthSuccess());
+
+      // reload expenses after login
       expenseCubit.loadExpensesFromLocal();
     } catch (e) {
       emit(AuthError(e.toString()));
     }
   }
 
+  // LOGOUT
   Future<void> logout() async {
-    await repository.logout();
+    await controller.logout();
+
     expenseCubit.clearExpenses();
+
     emit(AuthInitial());
   }
 
+  // GOOGLE LOGIN
   Future<void> signInWithGoogle() async {
     emit(AuthLoading());
 
     try {
-      await repository.signInWithGoogle();
+      await controller.signInWithGoogle();
+
       emit(AuthSuccess());
+
       expenseCubit.loadExpensesFromLocal();
     } catch (e) {
       emit(AuthError(e.toString()));
     }
   }
-  Future<String?> getUserEmail() {
-    return repository.getUserEmail();
-  }
 
-  Future<String?> getPhone() {
-    return repository.getPhone();
-  }
+  // PROFILE DATA
+  Future<String?> getUserEmail() => controller.getUserEmail();
+  Future<String?> getPhone() => controller.getPhone();
+  Future<String?> getAddress() => controller.getAddress();
 
-  Future<String?> getAddress() {
-    return repository.getAddress();
-  }
-
+  // CHECK LOGIN STATUS
   Future<void> checkLoginStatus() async {
     emit(AuthLoading());
 
-    final bool isLoggedIn = await repository.localStorage.isLoggedIn();
+    final isLoggedIn = await controller.isLoggedIn();
 
     if (isLoggedIn) {
       emit(AuthSuccess());

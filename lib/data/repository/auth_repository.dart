@@ -29,30 +29,40 @@ class AuthRepository {
       address: address,
       user: result.user,
     );
+    await localStorage.setCurrentUid(result.user!.uid);
+    await localStorage.setLogin(true);
   }
 
   Future<void> login(String email, String password) async {
-    final result = await _auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    final exists = await localStorage.isEmailRegistered(email);
 
-    final user = result.user;
-
-    if (user != null) {
-      await localStorage.saveUser(
-        email: email,
-        phone: await localStorage.getPhone() ?? '',
-        address: await localStorage.getAddress() ?? '',
-        user: user,
-      );
+    if (!exists) {
+      throw Exception("Please Sign Up First");
     }
+    try {
+      final result = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      final user = result.user;
 
-    await localStorage.setLogin(true);
+      if (user != null) {
+        await localStorage.setCurrentUid(user.uid);
+        await localStorage.setLogin(true);
+      }
+    } on FirebaseAuthException catch (e) {
+
+      if (e.code == 'wrong-password') {
+        throw Exception("Wrong Password");
+      }
+      else {
+        throw Exception("Invalid Email or Password");
+      }
+    }
   }
+
   Future<void> logout() async {
     await _auth.signOut();
-    await localStorage.clearUserData();
     await localStorage.setLogin(false);
   }
 
